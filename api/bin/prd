@@ -1,0 +1,2 @@
+require ('custom-env').env ('prod') //carrega a variavel de ambiente dev para o process.ENV
+require('./www')
