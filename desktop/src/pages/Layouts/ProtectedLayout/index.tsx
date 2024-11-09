@@ -1,11 +1,12 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useStore } from '@/store';
 import { getItem } from '@/utils/storage';
+import { AppSidebar } from '@/components/Sidebar/app-sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import Header from '@/components/Header';
 
 const ProtectedLayout = () => {
-  console.count('ProtectedLayout');
   const user = useStore.use.usuario();
-
   const token = getItem(localStorage, 'token');
   const location = useLocation();
 
@@ -14,11 +15,15 @@ const ProtectedLayout = () => {
   }
 
   return (
-    <>
-      <div className="w-full h-screen overflow-y-auto">
-        <Outlet />
-      </div>
-    </>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <Header />
+        <div className="p-4 pt-0">
+          <Outlet />
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 

@@ -17,6 +17,8 @@ const Router = () => {
           </Route>
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
+            <Route path="/usuario/criar" element={<Home />} />
+            <Route path="/usuario/gestao" element={<Home />} />
           </Route>
         </Route>
       </Routes>

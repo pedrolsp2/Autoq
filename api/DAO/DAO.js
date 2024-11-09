@@ -2,7 +2,7 @@ const { Sequelize, QueryTypes } = require('sequelize');
 const log = require('log-to-file');
 
 const sequelize = new Sequelize(
-  process.env.DB_GMAN,
+  process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
   {

@@ -1,4 +1,4 @@
-import { Token } from '@/types/Authentication';
+import { Token, Usuario } from '@/types/Authentication';
 import { setItem } from '@/utils/storage';
 import { QueryClient } from '@tanstack/react-query';
 import { ImmerStateCreator } from '.';
@@ -18,7 +18,7 @@ export type AuthSlice = AuthStore & AuthActions;
 
 const initialState: AuthStore = {
   token: null,
-  usuario: null,
+  usuario: {} as Usuario,
   isAuthenticating: false,
 };
 

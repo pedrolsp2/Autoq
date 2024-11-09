@@ -7,7 +7,18 @@ const login = async (req, res) => {
   try {
     const { DS_USUARIO, SENHA_USUARIO } = req.body;
 
-    let queryValidUser = /*SQL*/ `SELECT * FROM dim_usuario WHERE DS_USUARIO = '${DS_USUARIO}'`;
+    let queryValidUser = /*SQL*/ `
+      SELECT
+        user.SK_USUARIO,
+        user.NM_USUARIO,
+        user.EMAIL_USUARIO,
+        user.DS_USUARIO,
+        user.SENHA_USUARIO,
+        dp.ds_politica,
+        dp.id_politica
+      FROM dim_usuario user
+      LEFT JOIN dim_politica dp on user.POLITICA = dp.id_politica
+      WHERE user.DS_USUARIO = '${DS_USUARIO}'`;
     const responseValidUser = await DAO.select(queryValidUser);
 
     if (!responseValidUser.body[0]) {
@@ -30,6 +41,8 @@ const login = async (req, res) => {
           NM_USUARIO: user.NM_USUARIO,
           EMAIL_USUARIO: user.EMAIL_USUARIO,
           DS_USUARIO: user.DS_USUARIO,
+          POLITICA: user.ds_politica,
+          SK_POLITICA: user.id_politica,
         },
         process.env.SECRET,
         {
@@ -45,6 +58,8 @@ const login = async (req, res) => {
           NM_USUARIO: user.NM_USUARIO,
           EMAIL_USUARIO: user.EMAIL_USUARIO,
           DS_USUARIO: user.DS_USUARIO,
+          POLITICA: user.ds_politica,
+          SK_POLITICA: user.id_politica,
         },
         token: token,
       });
@@ -67,7 +82,7 @@ const tokenValidate = async (req, res, next) => {
   try {
     const decoded = jwt_decode.verify(token, process.env.SECRET);
     req.user = decoded;
-    return res.status(201).json();
+    return res.status(201).json(decoded);
   } catch (error) {
     console.error(error);
     return res.status(401).json({ message: 'Token inválido' });

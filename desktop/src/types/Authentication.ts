@@ -1,5 +1,5 @@
 export interface Token {
-  usuario: string | null;
+  usuario: Usuario;
   token: string | null;
 }
 
@@ -8,4 +8,6 @@ export interface Usuario {
   NM_USUARIO: string;
   EMAIL_USUARIO: string;
   DS_USUARIO: string;
+  POLITICA: string;
+  SK_POLITICA: number;
 }

@@ -39,12 +39,14 @@ const Login = () => {
   } = useMutation({
     mutationFn: authenticateAsync,
     onSuccess: (data) => {
-      login({ token: data.token, usuario: data.nomeUsuario });
+      login({ token: data.token, usuario: data.usuario });
       navigate(state?.path || '/');
     },
     onError: (err: AxiosError) => {
       if (isAxiosError<{ message: string }>(err)) {
-        toast.error('Usuário ou senha incorretos.');
+        toast('Usuário ou senha incorretos.', {
+          style: { background: '#ca3333', color: '#fff' },
+        });
       }
     },
   });

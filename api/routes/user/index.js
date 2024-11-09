@@ -6,7 +6,7 @@ var user = require('../../controllers/user/userController');
 
 router.put(
   '/user',
-  [middlware.validate, middlware.checkPermission],
+  // [middlware.validate, middlware.checkPermission],
   user.createUser
 );
 router.post(

@@ -10,7 +10,7 @@ module.exports = {
   prefix: '',
   theme: {
     container: {
-      center: true,
+      center: 'true',
       padding: '2rem',
       screens: {
         '2xl': '1400px',
@@ -24,19 +24,29 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
+          50: '#e9f7ee',
+          100: '#d0eddb',
+          200: '#a2dab7',
+          300: '#73c892',
+          400: '#45b56e',
+          500: '#16a34a',
+          600: '#12823b',
+          700: '#0d622c',
+          800: '#09411e',
+          900: '#04210f',
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
-          100: '#d8e0e4',
-          200: '#b1c0c9',
-          300: '#8aa1af',
-          400: '#638194',
-          500: '#3c6279',
-          600: '#304e61',
-          700: '#243b49',
-          800: '#182730',
-          900: '#0c1418',
         },
         secondary: {
+          100: '#fee7cc',
+          200: '#fdce99',
+          300: '#fdb666',
+          400: '#fc9d33',
+          500: '#fb8500',
+          600: '#c96a00',
+          700: '#975000',
+          800: '#643500',
+          900: '#321b00',
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
         },
@@ -60,6 +70,16 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -68,12 +88,20 @@ module.exports = {
       },
       keyframes: {
         'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
         },
         'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
         },
       },
       animation: {

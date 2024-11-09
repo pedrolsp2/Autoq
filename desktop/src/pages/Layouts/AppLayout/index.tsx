@@ -23,7 +23,7 @@ const AppLayout = () => {
       if (token) {
         login({
           token: token,
-          usuario: data.token.NM_USUARIO,
+          usuario: data,
         });
       }
     },

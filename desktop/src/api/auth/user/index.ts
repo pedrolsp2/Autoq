@@ -1,20 +1,17 @@
+import { Usuario } from '@/types/Authentication';
 import instance from '..';
 import { getHeaders } from '@/api/utils';
 interface AuthenticateResponse {
-  nomeUsuario: string;
+  usuario: Usuario;
   token: string;
 }
 
-interface ValidateResponse {
-  token: {
-    SK_USUARIO: number;
-    NM_USUARIO: string;
-    EMAIL_USUARIO: string;
-    DS_USUARIO: string;
-    iat: number;
-    exp: number;
-  };
-}
+type Token = Usuario & {
+  iat: number;
+  exp: number;
+};
+
+interface ValidateResponse extends Token {}
 
 export const authenticateUser = async (user: string, password: string) => {
   const response = await instance.post<AuthenticateResponse>(
