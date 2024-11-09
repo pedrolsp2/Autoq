@@ -41,7 +41,7 @@ const data = {
           url: 'usuario/criar',
         },
         {
-          title: 'Visualizar',
+          title: 'Gestão',
           url: 'usuario/gestao',
         },
       ],

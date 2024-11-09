@@ -5,6 +5,8 @@ import Login from '@/pages/Login';
 import Home from '@/pages/Home';
 import PublicLayout from './pages/Layouts/PublicLayout';
 import NotFound from './pages/Layouts/NotFound';
+import Criar from './pages/Usuario/Criar';
+import Gestao from './pages/Usuario/Gestao';
 
 const Router = () => {
   return (
@@ -17,8 +19,8 @@ const Router = () => {
           </Route>
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
-            <Route path="/usuario/criar" element={<Home />} />
-            <Route path="/usuario/gestao" element={<Home />} />
+            <Route path="/usuario/criar" element={<Criar />} />
+            <Route path="/usuario/gestao" element={<Gestao />} />
           </Route>
         </Route>
       </Routes>

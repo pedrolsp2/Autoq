@@ -19,7 +19,7 @@ const ProtectedLayout = () => {
       <AppSidebar />
       <SidebarInset>
         <Header />
-        <div className="p-4 pt-0">
+        <div className="p-4 px-8 pt-3">
           <Outlet />
         </div>
       </SidebarInset>

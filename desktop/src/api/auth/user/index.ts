@@ -1,6 +1,7 @@
 import { Usuario } from '@/types/Authentication';
 import instance from '..';
 import { getHeaders } from '@/api/utils';
+import { SchemaType } from '@/pages/Usuario/Criar';
 interface AuthenticateResponse {
   usuario: Usuario;
   token: string;
@@ -23,6 +24,10 @@ export const authenticateUser = async (user: string, password: string) => {
     { headers: getHeaders() }
   );
   return response.data;
+};
+
+export const newUser = async (props: SchemaType) => {
+  return await instance.put('/user', { ...props });
 };
 
 export const validateUserToken = async () => {
