@@ -28,22 +28,42 @@ async function createUser(req, res) {
 }
 const listUser = async (req, res) => {
   try {
-    let queryValidUser = /*SQL*/ `SELECT * FROM dim_usuario`;
-    const responseValidUser = await DAO.select(queryValidUser);
+    let query = /*SQL*/ `
+    SELECT 
+      dm.*,
+      dp.ds_politica
+     FROM dim_usuario dm
+     LEFT JOIN dim_politica dp on dm.POLITICA = dp.id_politica
+     WHERE dm.D_E_L_E_T IS NULL`;
+    const { body, status } = await DAO.select(query);
 
-    if (!responseValidUser.body[0]) {
-      return res.status(401).json({ message: 'Usuário ou senha inválidos.' });
+    if (status !== 200) {
+      return res.status(status).json({ message: 'Erro ao buscar usuarios' });
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         status: 200,
-        message: 'Login bem-sucedido',
-        data: { token: responseValidUser.body },
+        data: body,
       });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       status: 500,
+      message: error.message,
+    });
+  }
+};
+const deleteUser = async (req, res) => {
+  try {
+    let query = /*SQL*/ `UPDATE dim_usuario SET D_E_L_E_T = '*' WHERE (SK_USUARIO = ${req.body.SK_USUARIO})`;
+    const { status } = await DAO.update(query);
+    return status === 200
+      ? res.status(200).json({ message: 'Apagado com sucesso!' })
+      : res.status(500).json({ message: 'Erro ao apagar.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(512).json({
+      status: 512,
       message: error.message,
     });
   }
@@ -52,4 +72,5 @@ const listUser = async (req, res) => {
 module.exports = {
   createUser,
   listUser,
+  deleteUser,
 };

@@ -80,6 +80,9 @@ module.exports = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+        fontFamily: {
+          sans: ['Poppins', 'sans-serif'],
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

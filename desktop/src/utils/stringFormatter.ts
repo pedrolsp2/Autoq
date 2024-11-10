@@ -13,7 +13,13 @@ export const minutesToHours = (minutes: number) => {
 };
 
 export const getInitials = (name: string) => {
+  if (!name) return;
   const nameArray = name.split(' ');
+  if (nameArray.length === 1) {
+    return `${nameArray[0].slice(0, 1).toUpperCase()}${nameArray[0]
+      .slice(1, 2)
+      .toUpperCase()}`;
+  }
 
   const [firstName, lastName] = [nameArray[0], nameArray[nameArray.length - 1]];
 

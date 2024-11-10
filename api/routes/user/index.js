@@ -9,9 +9,10 @@ router.put(
   // [middlware.validate, middlware.checkPermission],
   user.createUser
 );
-router.post(
-  '/user',
-  [middlware.validate, middlware.checkPermission],
+router.get(
+  '/users',
+  // [middlware.validate, middlware.checkPermission],
   user.listUser
 );
+router.delete('/user', user.deleteUser);
 module.exports = router;

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { Eye, EyeOff, KeyRound, Loader, UserCircle2 } from 'lucide-react';
+import { Cog, Eye, EyeOff, KeyRound, Loader, UserCircle2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '@/store';
 import { useMutation } from '@tanstack/react-query';
@@ -70,6 +70,10 @@ const Login = () => {
         className="flex w-full flex-col gap-4 p-6 rounded border-primary-50/50 sm:w-[452px] border"
         onSubmit={onFormSubmit}
       >
+        <div className="flex items-center justify-center gap-2">
+          <Cog className="size-8 text-primary-400" />
+          <span className="text-xl font-semibold">AutoQ</span>
+        </div>
         <div
           className={`w-full rounded flex items-center border-b-2 py-1 bg-[#fafafa] px-2 ${
             focusInputUser && 'border-b-primary-500'
