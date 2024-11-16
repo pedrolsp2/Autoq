@@ -1,12 +1,14 @@
 import Lottie from 'lottie-react';
 import loading from '@/assets/animations/loading.json';
-export default function SplashLoading() {
+import { cn } from '@/lib/utils';
+
+export default function SplashLoading({ className }: { className?: string }) {
   return (
     <div>
       <Lottie
         animationData={loading}
         loop={true}
-        className="w-screen h-screen"
+        className={cn('w-screen h-screen', className)}
       />
     </div>
   );

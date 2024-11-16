@@ -7,6 +7,8 @@ import PublicLayout from './pages/Layouts/PublicLayout';
 import NotFound from './pages/Layouts/NotFound';
 import Criar from './pages/Usuario/Criar';
 import Gestao from './pages/Usuario/Gestao';
+import CriarCliente from './pages/Cliente/components/Criar';
+import GestaoCliente from './pages/Cliente/components/Gestao';
 
 const Router = () => {
   return (
@@ -21,6 +23,8 @@ const Router = () => {
             <Route path="/" element={<Home />} />
             <Route path="/usuario/criar" element={<Criar />} />
             <Route path="/usuario/gestao" element={<Gestao />} />
+            <Route path="/cliente/criar" element={<CriarCliente />} />
+            <Route path="/cliente/gestao" element={<GestaoCliente />} />
           </Route>
         </Route>
       </Routes>

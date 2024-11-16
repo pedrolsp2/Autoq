@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
-import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -15,13 +15,17 @@ import {
 import { Input } from '@/components/ui/input';
 import Senha from './components/Senha';
 import Politica from './components/Politica';
-import { useMutation } from '@tanstack/react-query';
-import { newUser } from '@/api/auth/user';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader, X } from 'lucide-react';
+import { AxiosError } from 'axios';
+import { newUser } from '@/api/business/users';
+import { usePolicy } from '@/utils/Politica/politica';
+import PolicyAlert from '@/utils/Politica';
+import { useStore } from '@/store';
 
 const formSchema = z.object({
-  NM_USUARIO: z.string().min(2).max(50),
+  NM_USUARIO: z.string({ message: 'Insira um nome' }).min(2).max(50),
   EMAIL_USUARIO: z.string().email({ message: 'Email inválido' }),
   SENHA_USUARIO: z.string(),
   DS_USUARIO: z.string(),
@@ -38,13 +42,16 @@ const Criar: React.FC = () => {
   const [success, setSucces] = useState(false);
   const [user, setUser] = useState({ user: '', psw: '' });
 
+  const queryClient = useQueryClient();
+  const { SK_POLITICA } = useStore.use.usuario();
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       NM_USUARIO: '',
       DS_USUARIO: '',
       EMAIL_USUARIO: '',
-      POLITICA: '1',
+      POLITICA: '3',
       SENHA_USUARIO: '',
     },
   });
@@ -53,15 +60,16 @@ const Criar: React.FC = () => {
     mutationFn: newUser,
     onSuccess(data) {
       setSucces(true);
+      queryClient.invalidateQueries({ queryKey: ['USERS'] });
       toast(data.data.message, {
-        style: { background: '#ca3333', color: '#fff' },
+        style: { background: '#16a34a', color: '#fff' },
       });
       form.reset();
     },
 
-    onError() {
-      toast('Erro ao criar usuário', {
-        style: { background: '#16a34a', color: '#fff' },
+    onError(error: AxiosError<{ message: string }>) {
+      toast(error.response?.data?.message, {
+        style: { background: '#ca3333', color: '#fff' },
       });
     },
   });
@@ -70,6 +78,10 @@ const Criar: React.FC = () => {
     setUser({ user: values.DS_USUARIO, psw: values.SENHA_USUARIO });
     mutate(values);
   };
+
+  if (!usePolicy(SK_POLITICA)) {
+    return <PolicyAlert />;
+  }
 
   return (
     <div className="flex flex-col">

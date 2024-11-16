@@ -11,6 +11,8 @@ import {
   Settings2,
   SquareTerminal,
   UserPlus,
+  UserPlus2,
+  UserRoundPlus,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/Sidebar/nav-main';
@@ -43,6 +45,21 @@ const data = {
         {
           title: 'Gestão',
           url: 'usuario/gestao',
+        },
+      ],
+    },
+    {
+      title: 'Cliente',
+      icon: UserRoundPlus,
+      isActive: true,
+      items: [
+        {
+          title: 'Criar',
+          url: 'cliente/criar',
+        },
+        {
+          title: 'Gestão',
+          url: 'cliente/gestao',
         },
       ],
     },

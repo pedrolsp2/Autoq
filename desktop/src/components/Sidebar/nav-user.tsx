@@ -1,14 +1,12 @@
-'use client';
-
 import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
   CreditCard,
+  Edit,
   LogOut,
   Sparkles,
 } from 'lucide-react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -25,7 +23,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { getInitials } from '@/utils/stringFormatter';
+import { useStore } from '@/store';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 export function NavUser({
   user,
@@ -37,6 +37,14 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const sair = useStore.use.logout();
+
+  const logout = () => {
+    sair(queryClient);
+    navigate('/login');
+  };
 
   return (
     <SidebarMenu>
@@ -83,27 +91,12 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+                <Edit />
+                Editar Perfil
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout()}>
               <LogOut />
               Sair
             </DropdownMenuItem>

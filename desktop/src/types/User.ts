@@ -7,5 +7,6 @@ export interface UserType {
   CREATED_AT: string;
   UPDATE_AT: string;
   D_E_L_E_T: any;
-  DS_POLITICA?: string;
+  ds_politica?: string;
+  POLITICA?: '1' | '2' | '3' | '4';
 }

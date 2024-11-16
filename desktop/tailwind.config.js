@@ -84,6 +84,7 @@ module.exports = {
           sans: ['Poppins', 'sans-serif'],
         },
       },
+      height: { container: 'calc(100vh - 110px)' },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

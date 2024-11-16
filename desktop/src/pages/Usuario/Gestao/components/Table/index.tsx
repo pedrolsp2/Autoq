@@ -1,12 +1,5 @@
 import { UserType } from '@/types/User';
-import React, { useMemo } from 'react';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  getPaginationRowModel,
-} from '@tanstack/react-table';
+import React, { useEffect, useState } from 'react';
 import {
   Table as Comp,
   TableBody,
@@ -16,155 +9,90 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { useDeleteUser } from '../../functions';
 import { useQueryClient } from '@tanstack/react-query';
+import Apagar from '../Apagar';
+import Editar from '../Editar';
 import { RefreshCcw } from 'lucide-react';
 
 interface TableProps {
   props: UserType[];
+  isPending: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ props }) => {
+const Table: React.FC<TableProps> = ({ props, isPending }) => {
+  const [users, setUsers] = useState<UserType[]>([]);
   const queryClient = useQueryClient();
-  const data = useMemo(() => props, [props]);
 
-  const { mutate, isPending } = useDeleteUser({ queryClient });
-
-  const handleEdit = (user: UserType) => {
-    console.log('Editar usuário', user);
+  const refetch = () => {
+    queryClient.invalidateQueries({ queryKey: ['USERS'] });
   };
 
-  const handleDelete = (user: UserType) => {
-    mutate(user.SK_USUARIO);
-  };
-
-  const columns: ColumnDef<UserType>[] = useMemo(
-    () => [
-      {
-        accessorKey: 'NM_USUARIO',
-        header: 'NOME',
-      },
-      {
-        accessorKey: 'DS_USUARIO',
-        header: 'USUARIO',
-      },
-      {
-        accessorKey: 'EMAIL_USUARIO',
-        header: 'EMAIL',
-      },
-      {
-        accessorKey: 'CREATED_AT',
-        header: 'CRIAÇÃO',
-        cell: ({ row }) => (
-          <div>
-            {row.original.CREATED_AT &&
-              format(new Date(row.original.CREATED_AT), 'dd/MM/yyyy')}
-          </div>
-        ),
-      },
-      {
-        accessorKey: 'ds_politica',
-        header: 'POLITICA',
-      },
-      {
-        accessorKey: 'D_E_L_E_T',
-        header: 'STATUS',
-        cell: ({ row }) => (
-          <div
-            className={cn(
-              'p-1 flex items-center justify-center rounded',
-              row.original.D_E_L_E_T
-                ? 'bg-red-50 text-red-500'
-                : 'bg-primary-50 text-primary-500'
-            )}
-          >
-            {row.original.D_E_L_E_T ? 'Inativo' : 'Ativo'}
-          </div>
-        ),
-      },
-      {
-        id: 'actions',
-        header: 'AÇÕES',
-        cell: ({ row }) => (
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleEdit(row.original)}
-            >
-              Editar
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => handleDelete(row.original)}
-            >
-              Deletar
-            </Button>
-          </div>
-        ),
-      },
-    ],
-    [handleDelete, handleEdit]
-  );
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  useEffect(() => {
+    if (props) {
+      setUsers(props);
+    }
+  }, [props]);
 
   return (
-    <div className="border rounded-md">
-      {isPending && (
-        <span className="bg-primary-50 text-primary-500">
-          Atualizando dados...
-        </span>
-      )}
-      <Comp>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
+    <>
+      <div className="flex items-center justify-between mb-1">
+        <span>{users.length} usuarios totais</span>
+        <Button variant="ghost" onClick={refetch}>
+          <RefreshCcw />
+        </Button>
+      </div>
+      <div className="border rounded-md">
+        {isPending && (
+          <span className="bg-primary-50 text-primary-500">
+            Atualizando dados...
+          </span>
+        )}
+        <Comp>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
+              <TableHead className="w-[50px]">ID</TableHead>
+              <TableHead className="w-[400px]">Nome</TableHead>
+              <TableHead className="w-[100px]">Usuario</TableHead>
+              <TableHead className="w-[150px]">Email</TableHead>
+              <TableHead className="w-[100px]">Criação</TableHead>
+              <TableHead className="w-[100px]">Politica</TableHead>
+              <TableHead className="w-[100px]">Status</TableHead>
+              <TableHead className="w-[100px]">Ações</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Comp>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {users.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{item.SK_USUARIO}</TableCell>
+                <TableCell>{item.NM_USUARIO}</TableCell>
+                <TableCell>{item.DS_USUARIO}</TableCell>
+                <TableCell>{item.EMAIL_USUARIO}</TableCell>
+                <TableCell>
+                  {format(new Date(item.CREATED_AT), 'dd/MM/yyyy')}
+                </TableCell>
+                <TableCell>{item.ds_politica}</TableCell>
+                <TableCell>
+                  {item.D_E_L_E_T ? (
+                    <span className="px-2 py-1 text-red-500 rounded bg-red-50">
+                      Inativo
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 rounded bg-emerald-50 text-emerald-500">
+                      Ativo
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell className="flex items-center gap-2">
+                  <Editar {...item} refetch={refetch} />
+                  <Apagar {...item} refetch={refetch} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Comp>
+      </div>
+    </>
   );
 };
 

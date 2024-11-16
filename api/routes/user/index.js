@@ -1,18 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var middlware = require('../../middleware/modules');
+var verification = require('../../middleware/verification');
 
 var user = require('../../controllers/user/userController');
 
-router.put(
-  '/user',
-  // [middlware.validate, middlware.checkPermission],
-  user.createUser
-);
-router.get(
-  '/users',
-  // [middlware.validate, middlware.checkPermission],
-  user.listUser
-);
+router.put('/user', [verification.existenceEmail], user.createUser);
+router.get('/users', user.listUser);
 router.delete('/user', user.deleteUser);
+router.patch('/user', user.editUser);
 module.exports = router;
