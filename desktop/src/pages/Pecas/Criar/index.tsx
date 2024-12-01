@@ -13,38 +13,41 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Senha from './components/Senha';
-import Politica from './components/Politica';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader, X } from 'lucide-react';
 import { AxiosError } from 'axios';
-import { newUser } from '@/api/business/users';
+import { newPecas } from '@/api/business/pecas';
 import { usePolicy } from '@/utils/Politica/politica';
 import PolicyAlert from '@/utils/Politica';
 import { useStore } from '@/store';
+import InputMask from 'react-input-mask';
+import { formatCurrency } from '@/utils/stringFormatter';
 
 const formSchema = z.object({
-  NM_USUARIO: z
-    .string({ message: 'Insira um nome valido' })
-    .min(2, { message: 'Insira um nome valido' })
-    .max(50),
-  EMAIL_USUARIO: z.string().email({ message: 'Email inválido' }),
-  SENHA_USUARIO: z.string({ message: 'Senha inválida' }),
-  DS_USUARIO: z.string({ message: 'Insira um usuário valido' }),
-  POLITICA: z
-    .enum(['1', '2', '3', '4', '5'], {
-      message: 'Selecione uma política válida de 1 a 5',
-    })
-    .optional(),
+  NM_PECAS: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  DS_CATEGORIA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  VLR_CUSTO: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  VLR_VENDA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  DS_LOCALIZACAO: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  UND_MEDIDA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
 });
 
 export type SchemaType = z.infer<typeof formSchema>;
 
 const Criar: React.FC = () => {
-  const [success, setSucces] = useState(false);
-  const [user, setUser] = useState({ user: '', psw: '' });
-
   const queryClient = useQueryClient();
   const { SK_POLITICA } = useStore.use.usuario();
 
@@ -53,25 +56,30 @@ const Criar: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: newUser,
+    mutationFn: newPecas,
     onSuccess(data) {
-      setSucces(true);
-      queryClient.invalidateQueries({ queryKey: ['USERS'] });
+      queryClient.invalidateQueries({ queryKey: ['PECAS'] });
       toast(data.data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
-      form.reset();
+      form.reset({
+        DS_CATEGORIA: '',
+        DS_LOCALIZACAO: '',
+        NM_PECAS: '',
+        UND_MEDIDA: '',
+        VLR_CUSTO: '',
+        VLR_VENDA: '',
+      });
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.response?.data?.message || 'Erro ao criar.', {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
   });
 
   const onSubmit = (values: SchemaType) => {
-    setUser({ user: values.DS_USUARIO, psw: values.SENHA_USUARIO });
     mutate(values);
   };
 
@@ -82,32 +90,9 @@ const Criar: React.FC = () => {
   return (
     <div className="flex flex-col">
       <span className="text-2xl font-semibold leading-none tracking-tight">
-        Novo usuário
-      </span>
-      <span className="text-sm text-neutral-500 dark:text-neutral-400">
-        De acordo com sua política, crie usuario para a ferramenta AutoQ.
+        Nova peças
       </span>
       <Separator className="my-6" />
-      {success && (
-        <div className="relative flex flex-col w-full p-2 border rounded">
-          <button
-            className="absolute right-2 top-2"
-            onClick={() => setSucces((prev) => !prev)}
-          >
-            <X size={18} />
-          </button>
-          <strong className="text-lg">Criado com sucesso!</strong>
-          <Separator className="my-2 bg-neutral-50" />
-          <span>
-            <strong>Usuario de acesso: </strong>
-            {user.user}
-          </span>
-          <span>
-            <strong>Senha: </strong>
-            {user.psw}
-          </span>
-        </div>
-      )}
 
       <Form {...form}>
         <form
@@ -116,12 +101,12 @@ const Criar: React.FC = () => {
         >
           <FormField
             control={form.control}
-            name="NM_USUARIO"
+            name="NM_PECAS"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>Nome da Peça</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: Fulano Silva" {...field} />
+                  <Input placeholder="Ex: Peça A" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -129,12 +114,12 @@ const Criar: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="EMAIL_USUARIO"
+            name="DS_CATEGORIA"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Categoria</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: nome@autoq.com" {...field} />
+                  <Input placeholder="Ex: Eletrônicos" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,12 +127,17 @@ const Criar: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="DS_USUARIO"
+            name="VLR_CUSTO"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Usuário</FormLabel>
+                <FormLabel>Custo</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: fsilva" {...field} />
+                  <Input
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(formatCurrency(e.target.value))
+                    }
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -155,13 +145,47 @@ const Criar: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="SENHA_USUARIO"
-            render={({ field }) => <Senha field={field} form={form} />}
+            name="VLR_VENDA"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Valor de Venda</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(formatCurrency(e.target.value))
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}
-            name="POLITICA"
-            render={({ field }) => <Politica field={field} />}
+            name="DS_LOCALIZACAO"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Localização</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: Prateleira A" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="UND_MEDIDA"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Unidade de Medida</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: kg" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <div className="flex">
             <Button type="submit" className="w-24 ml-auto">

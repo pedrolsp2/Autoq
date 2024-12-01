@@ -19,6 +19,8 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '@/store';
+import { usePolicy } from '@/utils/Politica/politica';
 
 export function NavMain({
   items,
@@ -34,7 +36,10 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { SK_POLITICA } = useStore.use.usuario();
+  const enabled = true;
   const navigate = useNavigate();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Cadastros</SidebarGroupLabel>
@@ -63,16 +68,18 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                subItem.url && navigate(subItem.url)
-                              }
-                            >
-                              <span>{subItem.title}</span>
-                            </div>
-                          </SidebarMenuSubButton>
+                          {enabled && (
+                            <SidebarMenuSubButton asChild>
+                              <div
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  subItem.url && navigate(subItem.url)
+                                }
+                              >
+                                <span>{subItem.title}</span>
+                              </div>
+                            </SidebarMenuSubButton>
+                          )}
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>

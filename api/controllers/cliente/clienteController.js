@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 var DAO = require('../../DAO/DAO');
-var { queryInsertSingle } = require('../../util/queryGen');
+var { queryInsertSingle, queryUpdate } = require('../../util/queryGen');
 
 async function createCliente(req, res) {
   const props = req.body;
@@ -36,7 +36,45 @@ async function selectCliente(req, res) {
   }
 }
 
+async function editCliente(req, res) {
+  const {
+    SK_CLIENTE,
+    NM_CLIENTE,
+    CPF_CLIENTE,
+    EMAIL_CLIENTE,
+    TEL_CLIENTE,
+    END_CLIENTE,
+    BAIRRO_CLIENTE,
+    NUM_RESIDENCIA,
+  } = req.body;
+
+  try {
+    let query = /*SQL*/ `
+      UPDATE dim_cliente SET ${queryUpdate({
+        NM_CLIENTE,
+        CPF_CLIENTE,
+        EMAIL_CLIENTE,
+        TEL_CLIENTE,
+        END_CLIENTE,
+        BAIRRO_CLIENTE,
+        NUM_RESIDENCIA,
+      })} WHERE SK_CLIENTE = ${SK_CLIENTE}`;
+
+    const response = await DAO.update(query);
+
+    return response.status === 200
+      ? res.json({
+          message: `Cliente ${NM_CLIENTE} editado com sucesso!`,
+        })
+      : res.status(500).json({ message: 'Erro ao editar cliente.' });
+  } catch (error) {
+    console.error('Erro ao editar cliente:', error);
+    return res.status(500).json({ error: 'Erro ao editar cliente.' });
+  }
+}
+
 module.exports = {
   createCliente,
   selectCliente,
+  editCliente,
 };

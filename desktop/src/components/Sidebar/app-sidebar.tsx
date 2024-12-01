@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useStore } from '@/store';
 import { getInitials } from '@/utils/stringFormatter';
+import { useNavigate } from 'react-router-dom';
 
 const data = {
   navMain: [
@@ -60,6 +61,21 @@ const data = {
         {
           title: 'Gestão',
           url: 'cliente/gestao',
+        },
+      ],
+    },
+    {
+      title: 'Peças',
+      icon: Cog,
+      isActive: true,
+      items: [
+        {
+          title: 'Criar',
+          url: 'pecas/criar',
+        },
+        {
+          title: 'Gestão',
+          url: 'pecas/gestao',
         },
       ],
     },
@@ -96,6 +112,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const navigate = useNavigate();
   const { NM_USUARIO, POLITICA, EMAIL_USUARIO, DS_USUARIO } =
     useStore.use.usuario();
   return (
@@ -103,7 +120,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" asChild onClick={() => navigate('/')}>
               <div className="cursor-pointer">
                 <div className="flex items-center justify-center rounded-lg aspect-square size-8 bg-primary-500 text-sidebar-primary-foreground">
                   <Cog className="size-4" />

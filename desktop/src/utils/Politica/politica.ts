@@ -15,4 +15,31 @@ export const usePolicy = (politica: number) => {
     };
     return values[politica];
   }
+  if (pathname.includes('cliente')) {
+    const values: TypeKey<boolean> = {
+      1: true,
+      2: true,
+      3: false,
+      4: true,
+    };
+    return values[politica];
+  }
+  if (pathname.includes('produto')) {
+    const values: TypeKey<boolean> = {
+      1: true,
+      2: true,
+      3: false,
+      4: true,
+    };
+    return values[politica];
+  }
+  if (pathname.includes('pecas')) {
+    const values: TypeKey<boolean> = {
+      1: true,
+      2: true,
+      3: false,
+      4: true,
+    };
+    return values[politica];
+  }
 };

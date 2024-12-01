@@ -63,14 +63,14 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
               <TableRow>
                 <TableHead className="w-[50px]">ID</TableHead>
                 <TableHead className="w-[300px]">Nome</TableHead>
-                <TableHead className="w-[150px]">CPF</TableHead>
-                <TableHead className="w-[150px]">Email</TableHead>
+                <TableHead className="w-[200px]">CPF</TableHead>
+                <TableHead className="w-[200px]">Email</TableHead>
                 <TableHead className="w-[200px]">Telefone</TableHead>
-                <TableHead className="w-[100px]">Endereço</TableHead>
-                <TableHead className="w-[100px]">Bairro</TableHead>
-                <TableHead className="w-[100px]">Número</TableHead>
-                <TableHead className="w-[100px]">Criação</TableHead>
-                <TableHead className="w-[100px]">Ações</TableHead>
+                <TableHead className="w-[200px]">Endereço</TableHead>
+                <TableHead className="w-[200px]">Bairro</TableHead>
+                <TableHead className="w-[200px]">Número</TableHead>
+                <TableHead className="w-[200px]">Criação</TableHead>
+                <TableHead className="w-[200px]">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

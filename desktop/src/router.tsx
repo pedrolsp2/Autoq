@@ -9,6 +9,8 @@ import Criar from './pages/Usuario/Criar';
 import Gestao from './pages/Usuario/Gestao';
 import CriarCliente from './pages/Cliente/components/Criar';
 import GestaoCliente from './pages/Cliente/components/Gestao';
+import CriarPecas from './pages/Pecas/Criar';
+import GestaoPecas from './pages/Pecas/Gestao';
 
 const Router = () => {
   return (
@@ -25,6 +27,8 @@ const Router = () => {
             <Route path="/usuario/gestao" element={<Gestao />} />
             <Route path="/cliente/criar" element={<CriarCliente />} />
             <Route path="/cliente/gestao" element={<GestaoCliente />} />
+            <Route path="/pecas/criar" element={<CriarPecas />} />
+            <Route path="/pecas/gestao" element={<GestaoPecas />} />
           </Route>
         </Route>
       </Routes>

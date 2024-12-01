@@ -5,6 +5,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -27,18 +28,10 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { editUser } from '@/api/business/users';
-import ReactInputMask from 'react-input-mask';
+import { editCliente } from '@/api/business/client';
 
 interface EditarProps extends ClienteType {
   refetch: () => void;
@@ -46,7 +39,7 @@ interface EditarProps extends ClienteType {
 
 const formSchema = z.object({
   NM_CLIENTE: z.string({ message: 'Nome é obrigratório' }).min(2).max(50),
-  EMAIL_CLIENTE: z.string().email({ message: 'Email inválido' }).optional(),
+  EMAIL_CLIENTE: z.any().optional(),
   CPF_CLIENTE: z
     .string({
       required_error: 'CPF/CNPJ é obrigatório.',
@@ -75,6 +68,7 @@ const Editar: React.FC<EditarProps> = ({
   NUM_RESIDENCIA,
   D_E_L_E_T,
   refetch,
+  SK_CLIENTE,
 }) => {
   const [open, setOpen] = useState(false);
   const { SK_POLITICA } = useStore.use.usuario();
@@ -94,11 +88,12 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: editUser,
+    mutationFn: editCliente,
     onSuccess(data) {
       toast(data.data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
+      setOpen(false);
       refetch();
       form.reset();
     },
@@ -111,7 +106,7 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const onSubmit = (data: SchemaType) => {
-    // mutate({ ...data, SK_USUARIO });
+    mutate({ ...data, SK_CLIENTE });
   };
 
   return (
@@ -165,6 +160,19 @@ const Editar: React.FC<EditarProps> = ({
                         <Input placeholder="123.456.789-10" {...inputProps} />
                       )}
                     </InputMask>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="EMAIL_CLIENTE"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>E-mail</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,11 +238,16 @@ const Editar: React.FC<EditarProps> = ({
                 </FormItem>
               )}
             />
-            <div className="flex">
+            <DialogFooter>
+              <DialogClose>
+                <Button type="button" variant="secondary" className="w-24">
+                  Cancelar
+                </Button>
+              </DialogClose>
               <Button type="submit" className="w-24 ml-auto">
-                {isPending ? <Loader className="animate-spin" /> : 'Cadastrar'}
+                {isPending ? <Loader className="animate-spin" /> : 'Confirmar'}
               </Button>
-            </div>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

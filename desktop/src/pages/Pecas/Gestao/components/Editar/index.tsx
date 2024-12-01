@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Edit, Loader } from 'lucide-react';
-import { UserType } from '@/types/User';
+import { PecasType } from '@/types/Pecas';
 import { useStore } from '@/store';
 import { usePolicy } from '@/utils/Politica/politica';
 import { cn } from '@/lib/utils';
@@ -26,40 +26,48 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { editUser } from '@/api/business/users';
+import { editPecas } from '@/api/business/pecas';
+import { formatCurrency } from '@/utils/stringFormatter';
 
-interface EditarProps extends UserType {
+interface EditarProps extends PecasType {
   refetch: () => void;
 }
 
 const formSchema = z.object({
-  NM_USUARIO: z.string({ message: 'Insira um nome' }).min(2).max(50),
-  EMAIL_USUARIO: z.string().email({ message: 'Email inválido' }),
-  DS_USUARIO: z.string(),
-  POLITICA: z.enum(['1', '2', '3', '4'], {
-    message: 'Selecione uma política válida',
-  }),
+  NM_PECAS: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  DS_CATEGORIA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  VLR_CUSTO: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  VLR_VENDA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  DS_LOCALIZACAO: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
+  UND_MEDIDA: z
+    .string({ message: 'Campo obrigratório.' })
+    .transform((item) => item.toUpperCase()),
 });
 
 export type SchemaType = z.infer<typeof formSchema>;
 
 const Editar: React.FC<EditarProps> = ({
-  SK_USUARIO,
-  DS_USUARIO,
+  SK_PECAS,
+  DS_CATEGORIA,
+  DS_LOCALIZACAO,
   D_E_L_E_T,
-  EMAIL_USUARIO,
-  NM_USUARIO,
-  POLITICA,
+  NM_PECAS,
+  UND_MEDIDA,
+  VLR_CUSTO,
+  VLR_VENDA,
   refetch,
 }) => {
   const [open, setOpen] = useState(false);
@@ -69,15 +77,17 @@ const Editar: React.FC<EditarProps> = ({
   const form = useForm<SchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      DS_USUARIO,
-      POLITICA,
-      EMAIL_USUARIO,
-      NM_USUARIO,
+      DS_CATEGORIA,
+      DS_LOCALIZACAO,
+      NM_PECAS,
+      UND_MEDIDA,
+      VLR_CUSTO,
+      VLR_VENDA,
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: editUser,
+    mutationFn: editPecas,
     onSuccess(data) {
       toast(data.data.message, {
         style: { background: '#16a34a', color: '#fff' },
@@ -94,7 +104,7 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const onSubmit = (data: SchemaType) => {
-    mutate({ ...data, SK_USUARIO });
+    mutate({ ...data, SK_PECAS });
   };
 
   return (
@@ -107,8 +117,8 @@ const Editar: React.FC<EditarProps> = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edição de usuario</DialogTitle>
-          <DialogDescription>Edite o usuario {DS_USUARIO}.</DialogDescription>
+          <DialogTitle>Edição de peça</DialogTitle>
+          <DialogDescription>Edite a peça {NM_PECAS}.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -117,12 +127,12 @@ const Editar: React.FC<EditarProps> = ({
           >
             <FormField
               control={form.control}
-              name="NM_USUARIO"
+              name="NM_PECAS"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>Nome da Peça</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Fulano Silva" {...field} />
+                    <Input placeholder="Ex: Peça A" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -130,12 +140,12 @@ const Editar: React.FC<EditarProps> = ({
             />
             <FormField
               control={form.control}
-              name="EMAIL_USUARIO"
+              name="DS_CATEGORIA"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: nome@autoq.com" {...field} />
+                    <Input placeholder="Ex: Eletrônicos" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,12 +153,17 @@ const Editar: React.FC<EditarProps> = ({
             />
             <FormField
               control={form.control}
-              name="DS_USUARIO"
+              name="VLR_CUSTO"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Usuário</FormLabel>
+                  <FormLabel>Custo</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: fsilva" {...field} />
+                    <Input
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(formatCurrency(e.target.value))
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,37 +171,50 @@ const Editar: React.FC<EditarProps> = ({
             />
             <FormField
               control={form.control}
-              name="POLITICA"
+              name="VLR_VENDA"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Politica</FormLabel>
+                  <FormLabel>Valor de Venda</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Privilégios" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Admin</SelectItem>
-                        <SelectItem value="2">Gerente</SelectItem>
-                        <SelectItem value="3">Vendedor</SelectItem>
-                        <SelectItem value="4">Caixa</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(formatCurrency(e.target.value))
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex items-center justify-end gap-2">
-              <DialogClose>
-                <Button type="button" variant="secondary">
-                  Cancelar
-                </Button>
-              </DialogClose>
-              <Button type="submit" className="w-24">
+            <FormField
+              control={form.control}
+              name="DS_LOCALIZACAO"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Localização</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Prateleira A" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="UND_MEDIDA"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Unidade de Medida</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: kg" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex">
+              <Button type="submit" className="w-24 ml-auto">
                 {isPending ? <Loader className="animate-spin" /> : 'Editar'}
               </Button>
             </div>
