@@ -16,3 +16,7 @@ export const getCliente = async () => {
 export const editCliente = async (props: EditProps) => {
   return await instance.patch('/cliente', { ...props });
 };
+
+export const deletCliente = async (SK_CLIENTE: number) => {
+  return await instance.delete('/cliente', { data: { SK_CLIENTE } });
+};

@@ -6,5 +6,6 @@ export interface PecasType {
   VLR_VENDA: string;
   DS_LOCALIZACAO: string;
   UND_MEDIDA: string;
+  CREATED_AT: string;
   D_E_L_E_T: boolean;
 }

@@ -10,24 +10,24 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Loader, Trash } from 'lucide-react';
-import { UserType } from '@/types/User';
 import { useStore } from '@/store';
 import { usePolicy } from '@/utils/Politica/politica';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
-import { deleteUser } from '@/api/business/users';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
+import { ClienteType } from '@/types/Cliente';
+import { deletCliente } from '@/api/business/client';
 
-interface ApagarProps extends UserType {
+interface ApagarProps extends ClienteType {
   refetch: () => void;
 }
 
 const Apagar: React.FC<ApagarProps> = ({
-  SK_USUARIO,
+  SK_CLIENTE,
   D_E_L_E_T,
-  NM_USUARIO,
+  NM_CLIENTE,
   refetch,
 }) => {
   const [open, setOpen] = useState(false);
@@ -36,9 +36,9 @@ const Apagar: React.FC<ApagarProps> = ({
   const disabled = !usePolicy(SK_POLITICA) || D_E_L_E_T;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: deleteUser,
+    mutationFn: deletCliente,
     onSuccess(data) {
-      toast(data.message, {
+      toast(data.data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       setOpen(false);
@@ -64,7 +64,7 @@ const Apagar: React.FC<ApagarProps> = ({
         <DialogHeader>
           <DialogTitle>Deseja mesmo desativar esse usuário?</DialogTitle>
           <DialogDescription>
-            Ao confirmar, o usuário {NM_USUARIO} ficará inativo.
+            Ao confirmar, o cliente {NM_CLIENTE} ficará inativo.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -73,7 +73,7 @@ const Apagar: React.FC<ApagarProps> = ({
               Cancelar
             </Button>
           </DialogClose>
-          <Button onClick={() => mutate(SK_USUARIO)} className="w-24">
+          <Button onClick={() => mutate(SK_CLIENTE)} className="w-24">
             {isPending ? <Loader className="animate-spin" /> : 'Apagar'}
           </Button>
         </DialogFooter>
