@@ -16,9 +16,9 @@ import { usePolicy } from '@/utils/Politica/politica';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
-import { deleteUser } from '@/api/business/users';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
+import { deleteUser } from '@/services/user';
 
 interface ApagarProps extends UserType {
   refetch: () => void;
@@ -46,7 +46,7 @@ const Apagar: React.FC<ApagarProps> = ({
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },

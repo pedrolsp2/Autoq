@@ -31,6 +31,7 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { editPecas } from '@/api/business/pecas';
 import { formatCurrency } from '@/utils/stringFormatter';
+import { updatePecas } from '@/services/pecas';
 
 interface EditarProps extends PecasType {
   refetch: () => void;
@@ -87,24 +88,24 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: editPecas,
+    mutationFn: updatePecas,
     onSuccess(data) {
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
+      setOpen(false);
       refetch();
-      form.reset();
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
   });
 
   const onSubmit = (data: SchemaType) => {
-    mutate({ ...data, SK_PECAS });
+    mutate({ id: SK_PECAS, updatedData: data });
   };
 
   return (

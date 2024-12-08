@@ -23,6 +23,7 @@ import PolicyAlert from '@/utils/Politica';
 import { useStore } from '@/store';
 import InputMask from 'react-input-mask';
 import { formatCurrency } from '@/utils/stringFormatter';
+import { createPecas } from '@/services/pecas';
 
 const formSchema = z.object({
   NM_PECAS: z
@@ -56,10 +57,10 @@ const Criar: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: newPecas,
+    mutationFn: createPecas,
     onSuccess(data) {
       queryClient.invalidateQueries({ queryKey: ['PECAS'] });
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       form.reset({
@@ -73,7 +74,7 @@ const Criar: React.FC = () => {
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message || 'Erro ao criar.', {
+      toast(error.message || 'Erro ao criar.', {
         style: { background: '#ca3333', color: '#fff' },
       });
     },

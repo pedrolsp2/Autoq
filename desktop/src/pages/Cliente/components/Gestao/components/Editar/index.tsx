@@ -31,7 +31,7 @@ import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { editCliente } from '@/api/business/client';
+import { updateCliente } from '@/services/cliente';
 
 interface EditarProps extends ClienteType {
   refetch: () => void;
@@ -39,7 +39,6 @@ interface EditarProps extends ClienteType {
 
 const formSchema = z.object({
   NM_CLIENTE: z.string({ message: 'Nome é obrigratório' }).min(2).max(50),
-  EMAIL_CLIENTE: z.any().optional(),
   CPF_CLIENTE: z
     .string({
       required_error: 'CPF/CNPJ é obrigatório.',
@@ -78,7 +77,6 @@ const Editar: React.FC<EditarProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       NM_CLIENTE,
-      EMAIL_CLIENTE,
       CPF_CLIENTE,
       TEL_CLIENTE,
       END_CLIENTE,
@@ -88,9 +86,9 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: editCliente,
+    mutationFn: updateCliente,
     onSuccess(data) {
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       setOpen(false);
@@ -99,14 +97,14 @@ const Editar: React.FC<EditarProps> = ({
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
   });
 
   const onSubmit = (data: SchemaType) => {
-    mutate({ ...data, SK_CLIENTE });
+    mutate({ id: SK_CLIENTE, updatedData: data });
   };
 
   return (
@@ -160,19 +158,6 @@ const Editar: React.FC<EditarProps> = ({
                         <Input placeholder="123.456.789-10" {...inputProps} />
                       )}
                     </InputMask>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="EMAIL_CLIENTE"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

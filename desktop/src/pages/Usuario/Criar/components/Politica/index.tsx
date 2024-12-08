@@ -23,7 +23,7 @@ interface PoliticaProps {
 const Politica: React.FC<PoliticaProps> = ({ field }) => {
   const { SK_POLITICA } = useStore.use.usuario();
 
-  const enableInput = [1, 2, 4].includes(SK_POLITICA);
+  const enableInput = [1, 2, 4].includes(Number(SK_POLITICA));
 
   if (!enableInput) return;
   return (

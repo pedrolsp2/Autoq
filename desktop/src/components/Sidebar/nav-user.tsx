@@ -1,12 +1,4 @@
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  Edit,
-  LogOut,
-  Sparkles,
-} from 'lucide-react';
+import { ChevronsUpDown, Edit, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,

@@ -29,10 +29,6 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
   const memoData = useMemo(() => props || [], [props]);
   const memoColumns = useMemo(
     () => [
-      columnHelper.accessor('SK_PECAS', {
-        id: 'ID',
-        header: 'ID',
-      }),
       columnHelper.accessor('NM_PECAS', {
         id: 'NM_PECAS',
         header: 'NOME',
@@ -118,7 +114,7 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
           <RefreshCcw />
         </Button>
       </div>
-      <div className="border rounded-md">
+      <div>
         {isPending && (
           <span className="bg-primary-50 text-primary-500">
             Atualizando dados...

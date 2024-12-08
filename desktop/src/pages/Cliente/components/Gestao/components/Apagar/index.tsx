@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { ClienteType } from '@/types/Cliente';
 import { deletCliente } from '@/api/business/client';
+import { deleteCliente } from '@/services/cliente';
 
 interface ApagarProps extends ClienteType {
   refetch: () => void;
@@ -36,9 +37,9 @@ const Apagar: React.FC<ApagarProps> = ({
   const disabled = !usePolicy(SK_POLITICA) || D_E_L_E_T;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: deletCliente,
+    mutationFn: deleteCliente,
     onSuccess(data) {
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       setOpen(false);
@@ -46,7 +47,7 @@ const Apagar: React.FC<ApagarProps> = ({
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },

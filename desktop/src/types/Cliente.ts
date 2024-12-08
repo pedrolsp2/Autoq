@@ -1,5 +1,5 @@
 export interface ClienteType {
-  SK_CLIENTE: number;
+  SK_CLIENTE: string;
   NM_CLIENTE: string;
   CPF_CLIENTE: string;
   EMAIL_CLIENTE: string;

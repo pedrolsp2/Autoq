@@ -1,9 +1,9 @@
-import { listPecas } from '@/api/business/pecas';
+import { readPecas } from '@/services/pecas';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetPecas = () => {
   return useQuery({
-    queryFn: listPecas,
+    queryFn: readPecas,
     queryKey: ['PECAS'],
   });
 };

@@ -21,6 +21,7 @@ import { useStore } from '@/store';
 import { usePolicy } from '@/utils/Politica/politica';
 import PolicyAlert from '@/utils/Politica';
 import { Separator } from '@/components/ui/separator';
+import { createCliente } from '@/services/cliente';
 
 const formSchema = z.object({
   NM_CLIENTE: z.string({ message: 'Nome é obrigratório' }).min(2).max(50),
@@ -50,7 +51,7 @@ const CriarCliente: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: newCliente,
+    mutationFn: createCliente,
     onSuccess(data) {
       toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },

@@ -4,10 +4,9 @@ import { Cog, Eye, EyeOff, KeyRound, Loader, UserCircle2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '@/store';
 import { useMutation } from '@tanstack/react-query';
-import { authenticateUser } from '@/api/auth/user';
 import { toast } from 'sonner';
-import { AxiosError, isAxiosError } from 'axios';
 import { Button } from '@/components/ui/button';
+import { getUserByCredentials } from '@/services/auth';
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -21,33 +20,26 @@ const Login = () => {
 
   const login = useStore.use.login();
 
-  async function authenticateAsync({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }) {
-    const token = await authenticateUser(username, password);
-    return token;
-  }
-
   const {
     mutate: onLogin,
     isError,
     isPending,
   } = useMutation({
-    mutationFn: authenticateAsync,
+    mutationFn: getUserByCredentials,
     onSuccess: (data) => {
-      login({ token: data.token, usuario: data.usuario });
-      navigate(state?.path || '/');
-    },
-    onError: (err: AxiosError) => {
-      if (isAxiosError<{ message: string }>(err)) {
-        toast('Usuário ou senha incorretos.', {
+      if (data.status === 500) {
+        return toast('Usuário ou senha incorretos.', {
           style: { background: '#ca3333', color: '#fff' },
         });
       }
+      //@ts-ignore
+      login({ token: JSON.stringify(data.usuario), usuario: data.usuario });
+      navigate(state?.path || '/');
+    },
+    onError: () => {
+      toast('Usuário ou senha incorretos.', {
+        style: { background: '#ca3333', color: '#fff' },
+      });
     },
   });
   const userRef = useRef<HTMLInputElement>(null);
@@ -92,7 +84,7 @@ const Login = () => {
             autoComplete="off"
             id="user"
             placeholder="Digite seu usuário"
-            className={` w-full rounded-md p-2 outline-none bg-transparent placeholder:text-primary-300`}
+            className={` w-full rounded-md p-2 outline-none bg-transparent`}
             type="text"
             ref={userRef}
             onChange={(e) => setInputUser(e.target.value)}
@@ -118,7 +110,7 @@ const Login = () => {
             <input
               id="password"
               placeholder="Digite sua senha"
-              className="w-full p-2 bg-transparent rounded-md outline-none placeholder:text-primary-300"
+              className="w-full p-2 bg-transparent rounded-md outline-none"
               type={passwordVisible ? 'text' : 'password'}
               onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setFocusInputPassword(!focusInputPassword)}

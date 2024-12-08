@@ -113,8 +113,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate();
-  const { NM_USUARIO, POLITICA, EMAIL_USUARIO, DS_USUARIO } =
-    useStore.use.usuario();
+  const { NM_USUARIO, EMAIL_USUARIO, DS_USUARIO } = useStore.use.usuario();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -127,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="grid flex-1 text-sm leading-tight text-left">
                   <span className="font-bold truncate">AutoQ</span>
-                  <span className="text-xs truncate">{POLITICA}</span>
+                  <span className="text-xs truncate">{NM_USUARIO}</span>
                 </div>
               </div>
             </SidebarMenuButton>
@@ -142,7 +141,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            avatar: getInitials(NM_USUARIO || ''),
+            avatar: getInitials(NM_USUARIO || '')!,
             email: EMAIL_USUARIO,
             name: DS_USUARIO,
           }}

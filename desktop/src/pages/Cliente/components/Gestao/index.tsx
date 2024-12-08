@@ -19,7 +19,7 @@ const Gestao: React.FC = () => {
 
   return (
     <div>
-      <Table props={data} isPending={isPending} />
+      <Table props={data!} isPending={isPending} />
     </div>
   );
 };

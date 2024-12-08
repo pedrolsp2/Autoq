@@ -1,9 +1,9 @@
-import { listUsers } from '@/api/business/users';
+import { readItems } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetUsers = () => {
   return useQuery({
-    queryFn: listUsers,
+    queryFn: readItems,
     queryKey: ['USERS'],
   });
 };

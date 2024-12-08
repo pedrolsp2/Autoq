@@ -36,7 +36,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { editUser } from '@/api/business/users';
+import { updateUser } from '@/services/user';
 
 interface EditarProps extends UserType {
   refetch: () => void;
@@ -77,24 +77,25 @@ const Editar: React.FC<EditarProps> = ({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: editUser,
+    mutationFn: updateUser,
     onSuccess(data) {
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       refetch();
       form.reset();
+      setOpen(false);
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
   });
 
   const onSubmit = (data: SchemaType) => {
-    mutate({ ...data, SK_USUARIO });
+    mutate({ id: SK_USUARIO, updatedData: data });
   };
 
   return (

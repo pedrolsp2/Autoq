@@ -18,11 +18,10 @@ import Politica from './components/Politica';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader, X } from 'lucide-react';
-import { AxiosError } from 'axios';
-import { newUser } from '@/api/business/users';
 import { usePolicy } from '@/utils/Politica/politica';
 import PolicyAlert from '@/utils/Politica';
 import { useStore } from '@/store';
+import { createItem } from '@/services/user';
 
 const formSchema = z.object({
   NM_USUARIO: z
@@ -32,7 +31,7 @@ const formSchema = z.object({
   EMAIL_USUARIO: z.string().email({ message: 'Email inválido' }),
   SENHA_USUARIO: z.string({ message: 'Senha inválida' }),
   DS_USUARIO: z.string({ message: 'Insira um usuário valido' }),
-  POLITICA: z
+  SK_POLITICA: z
     .enum(['1', '2', '3', '4', '5'], {
       message: 'Selecione uma política válida de 1 a 5',
     })
@@ -53,18 +52,18 @@ const Criar: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: newUser,
+    mutationFn: createItem,
     onSuccess(data) {
       setSucces(true);
       queryClient.invalidateQueries({ queryKey: ['USERS'] });
-      toast(data.data.message, {
+      toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
       });
       form.reset();
     },
 
-    onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+    onError(error) {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
@@ -160,7 +159,7 @@ const Criar: React.FC = () => {
           />
           <FormField
             control={form.control}
-            name="POLITICA"
+            name="SK_POLITICA"
             render={({ field }) => <Politica field={field} />}
           />
           <div className="flex">

@@ -33,10 +33,6 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
   const memoData = useMemo(() => props || [], [props]);
   const memoColumns = useMemo(
     () => [
-      columnHelper.accessor('SK_USUARIO', {
-        id: 'ID',
-        header: 'ID',
-      }),
       columnHelper.accessor('NM_USUARIO', {
         id: 'NM_USUARIO',
         header: 'NOME',
@@ -50,14 +46,10 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
       columnHelper.accessor('EMAIL_USUARIO', {
         id: 'EMAIL_USUARIO',
         header: 'EMAIL',
-        size: 150,
+        size: 300,
       }),
       columnHelper.accessor('CREATED_AT', {
         id: 'CREATED_AT',
-        cell: (info) => {
-          const date = new Date(info.getValue());
-          return format(date, 'dd/MM/yyyy');
-        },
         header: 'CRIACAO',
         size: 150,
       }),

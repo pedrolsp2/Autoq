@@ -1,5 +1,5 @@
 export interface PecasType {
-  SK_PECAS: number;
+  SK_PECAS: string;
   NM_PECAS: string;
   DS_CATEGORIA: string;
   VLR_CUSTO: string;

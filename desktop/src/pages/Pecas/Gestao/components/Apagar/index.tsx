@@ -15,10 +15,10 @@ import { usePolicy } from '@/utils/Politica/politica';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
-import { deletePecas } from '@/api/business/pecas';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { PecasType } from '@/types/Pecas';
+import { deletePeca } from '@/services/pecas';
 
 interface ApagarProps extends PecasType {
   refetch: () => void;
@@ -36,7 +36,7 @@ const Apagar: React.FC<ApagarProps> = ({
   const disabled = !usePolicy(SK_POLITICA) || D_E_L_E_T;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: deletePecas,
+    mutationFn: deletePeca,
     onSuccess(data) {
       toast(data.message, {
         style: { background: '#16a34a', color: '#fff' },
@@ -46,7 +46,7 @@ const Apagar: React.FC<ApagarProps> = ({
     },
 
     onError(error: AxiosError<{ message: string }>) {
-      toast(error.response?.data?.message, {
+      toast(error.message, {
         style: { background: '#ca3333', color: '#fff' },
       });
     },
