@@ -16,7 +16,6 @@ import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { newCliente } from '@/api/business/client';
 import { useStore } from '@/store';
 import { usePolicy } from '@/utils/Politica/politica';
 import PolicyAlert from '@/utils/Politica';

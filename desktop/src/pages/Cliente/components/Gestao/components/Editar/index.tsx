@@ -59,7 +59,6 @@ export type SchemaType = z.infer<typeof formSchema>;
 
 const Editar: React.FC<EditarProps> = ({
   NM_CLIENTE,
-  EMAIL_CLIENTE,
   CPF_CLIENTE,
   TEL_CLIENTE,
   END_CLIENTE,

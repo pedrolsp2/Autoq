@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -29,7 +28,6 @@ import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { editPecas } from '@/api/business/pecas';
 import { formatCurrency } from '@/utils/stringFormatter';
 import { updatePecas } from '@/services/pecas';
 

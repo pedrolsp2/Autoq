@@ -1,23 +1,7 @@
 import * as React from 'react';
-import {
-  BookOpen,
-  Bot,
-  Cog,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-  UserPlus,
-  UserPlus2,
-  UserRoundPlus,
-} from 'lucide-react';
+import { Cog, UserPlus, UserRoundPlus } from 'lucide-react';
 
 import { NavMain } from '@/components/Sidebar/nav-main';
-import { NavProjects } from '@/components/Sidebar/nav-projects';
-import { NavSecondary } from '@/components/Sidebar/nav-secondary';
 import { NavUser } from '@/components/Sidebar/nav-user';
 import {
   Sidebar,

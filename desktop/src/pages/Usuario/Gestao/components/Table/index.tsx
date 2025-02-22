@@ -1,7 +1,6 @@
 import { UserType } from '@/types/User';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
 import { useQueryClient } from '@tanstack/react-query';
 import Apagar from '../Apagar';
 import Editar from '../Editar';

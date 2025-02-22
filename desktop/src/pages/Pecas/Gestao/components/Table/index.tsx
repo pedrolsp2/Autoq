@@ -51,10 +51,6 @@ const Table: React.FC<TableProps> = ({ props, isPending }) => {
       }),
       columnHelper.accessor('CREATED_AT', {
         id: 'CREATED_AT',
-        cell: (info) => {
-          const date = new Date(info.getValue());
-          return format(date, 'dd/MM/yyyy');
-        },
         header: 'CRIACAO',
         size: 150,
       }),

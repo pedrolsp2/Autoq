@@ -19,8 +19,6 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '@/store';
-import { usePolicy } from '@/utils/Politica/politica';
 
 export function NavMain({
   items,
@@ -36,7 +34,6 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { SK_POLITICA } = useStore.use.usuario();
   const enabled = true;
   const navigate = useNavigate();
 

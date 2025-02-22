@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import React, { useState } from 'react';
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,13 +15,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Loader, X } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { AxiosError } from 'axios';
-import { newPecas } from '@/api/business/pecas';
 import { usePolicy } from '@/utils/Politica/politica';
 import PolicyAlert from '@/utils/Politica';
 import { useStore } from '@/store';
-import InputMask from 'react-input-mask';
 import { formatCurrency } from '@/utils/stringFormatter';
 import { createPecas } from '@/services/pecas';
 

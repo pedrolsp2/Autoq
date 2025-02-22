@@ -18,7 +18,6 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { ClienteType } from '@/types/Cliente';
-import { deletCliente } from '@/api/business/client';
 import { deleteCliente } from '@/services/cliente';
 
 interface ApagarProps extends ClienteType {
